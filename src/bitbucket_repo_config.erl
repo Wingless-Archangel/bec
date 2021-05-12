@@ -133,6 +133,8 @@ getter(<<"branch-restrictions">>) ->
   fun bitbucket:get_branch_restrictions/2;
 getter(<<"default-branch">>) ->
   fun bitbucket:get_default_branch/2;
+getter(<<"default-reviewer">>) ->
+  fun bitbucket:get_default_reviewers/2;
 getter(<<"wz-branch-reviewers">>) ->
   fun bitbucket:get_wz_branch_reviewers/2;
 getter(<<"wz-pr-restrictions">>) ->

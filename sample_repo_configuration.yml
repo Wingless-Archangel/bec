@@ -156,3 +156,11 @@ webhooks:
       secret: my_other_secret
     events:
       - pr:modified
+
+default-reviewer:
+  - from-branch: AA-**
+    to-branch: BB-**
+    users:
+      - user_a
+      - user_b
+    approval-required: 1

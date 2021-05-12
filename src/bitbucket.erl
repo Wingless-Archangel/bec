@@ -14,6 +14,8 @@
           %% Default Branch
         , get_default_branch/2
         , set_default_branch/3
+          %% Default Reviewers
+        , get_default_reviewers/2
           %% Workzone Branch Reviewers
         , get_wz_branch_reviewers/2
         , set_wz_branch_reviewers/3
@@ -116,6 +118,19 @@ set_default_branch(ProjectKey, RepoSlug, BranchId) ->
   case bitbucket_api:set_default_branch(ProjectKey, RepoSlug, BranchId) of
     {ok, #{}} ->
       ok;
+    {error, Reason} ->
+      {error, Reason}
+  end.
+
+%%==============================================================================
+%% Default Reviewers
+%%==============================================================================
+-spec get_default_reviewers(project_key(), repo_slug()) ->
+        {ok, bec_branch_t:branch_id()} | {error, any()}.
+get_default_reviewers(ProjectKey, RepoSlug) ->
+  case bitbucket_api:get_default_reviewers(ProjectKey, RepoSlug) of
+    {ok, Response} ->
+      {ok, bec_reviewer_t:from_map(Response);
     {error, Reason} ->
       {error, Reason}
   end.

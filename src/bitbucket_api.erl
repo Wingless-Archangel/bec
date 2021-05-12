@@ -13,6 +13,10 @@
           %% Default Branch
         , get_default_branch/2
         , set_default_branch/3
+          %% Default Reviewers
+        , find_user_id/1
+        , get_default_reviewers/2
+        , set_default_reviewers/3
           %% Workzone Branch Reviewer
         , delete_wz_branch_reviewer/3
         , get_wz_branch_reviewers/2
@@ -106,6 +110,33 @@ set_default_branch(ProjectKey, RepoSlug, Body) ->
   Args = [?API_VSN, ProjectKey, RepoSlug],
   Url  = format_url(Fmt, Args),
   bitbucket_http:put_request(Url, jsx:encode(Body)).
+
+%%==============================================================================
+%% Default Reviewers
+%%==============================================================================
+-spec find_user_id(string()) ->
+        {ok, map()} | {error, any()}.
+find_user_id(SearchTerm) ->
+  Fmt = "rest/api/~s/users?filter=~s",
+  Args = [?API_VSN, SearchTerm],
+  Url = format_url(Fmt, Args),
+  bitbucket_http:get_request(Url).
+
+-spec get_default_reviewers(project_key(), repo_slug()) ->
+        {ok, map()} | {error, any()}.
+get_default_reviewers(ProjectKey, RepoSlug) ->
+  Fmt  = "/rest/default-revierwers/api/~s/projects/~s/repos/~s/conditions",
+  Args = [?API_VSN, ProjectKey, RepoSlug],
+  Url  = format_url(Fmt, Args),
+  bitbucket_http:get_request(Url).
+
+-spec set_default_reviewers(project_key(), repo_slug(), map()) ->
+        {ok, map()} | {error, any()}.
+set_default_reviewers(ProjectKey, RepoSlug, Body) ->
+  Fmt  = "/rest/default-revierwers/api/~s/projects/~s/repos/~s/condition",
+  Args = [?API_VSN, ProjectKey, RepoSlug],
+  Url  = format_url(Fmt, Args),
+  bitbucket_http:post_request(Url, jsx:encode(Body)).
 
 %%==============================================================================
 %% Workzone Branch Reviewers
